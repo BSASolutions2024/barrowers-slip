@@ -4,7 +4,7 @@ const nextConfig = {
         serverActions: {
           allowedOrigins: [
             'localhost:3000', // localhost
-            'https://potential-space-barnacle-9q5474qr56qf7vj7-3000.app.github.dev', // Codespaces
+            'https://barrowers-slip.vercel.app', // Codespaces
           ],
         },
       },
