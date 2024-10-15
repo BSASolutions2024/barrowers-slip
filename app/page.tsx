@@ -5,6 +5,7 @@ import { borrowItem } from "@/lib/actions";
 
 import Image from "next/image";
 import { toJSONLocal } from "@/lib/helper";
+import TestQuery from "@/lib/postgre";
 
 export default async function Home() {
   const comp_properties = COMP_PROPERTIES
