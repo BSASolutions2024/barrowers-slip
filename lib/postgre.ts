@@ -1,9 +1,10 @@
 // no-config
 import { sql } from '@vercel/postgres';
+import { Asset, BorrowRecord } from './interface';
 
-export default async function TestQuery() {
+export default async function getAllRecords() {
 
-    const { rows } = await sql`SELECT * FROM property_borrowed_list `;
+    const data = await sql<Asset>`SELECT * FROM assets `;
 
-    return rows
+    return data.rows
 }

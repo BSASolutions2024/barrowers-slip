@@ -5,7 +5,7 @@ import { borrowItem } from "@/lib/actions";
 
 import Image from "next/image";
 import { toJSONLocal } from "@/lib/helper";
-import TestQuery from "@/lib/postgre";
+import getAllRecords from "@/lib/postgre";
 
 export default async function Home() {
   const comp_properties = COMP_PROPERTIES
@@ -15,7 +15,7 @@ export default async function Home() {
   const arrayofItems = borrowedItems.map((item:any) => {
     return item.items_borrowed.split(',').map((i:string) => i.trim());
   }).flat()
-
+  
   return (
     <div className="w-[50%] container mx-auto">
         <div className="flex flex-col justify-center">
