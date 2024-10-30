@@ -7,7 +7,8 @@ export type Asset = {
     asset_id:string,
     asset_name: string,
     asset_type?: string,
-    asset_status: 'available' | 'borrowed' | 'maintenance'
+    asset_status: 'available' | 'borrowed' | 'maintenance',
+    created_at: string
 }
 
 export type BorrowItem = {
@@ -21,11 +22,16 @@ export type BorrowItem = {
 export type BorrowRecord = {
     id:string,
     borrower_name:string,
-    borrower_email:string,
+    borrower_email?:string,
     borrow_date:string,
     return_date:string,
-    borrow_status: 'open' | 'completed',
+    borrow_status?: 'open' | 'completed',
     admin_id:string,
+    borrower_id: string,
+    contact_no: string,
+    description: string,
+    agreement: string,
+    created_at: string
 }
 
 export type Admin = {

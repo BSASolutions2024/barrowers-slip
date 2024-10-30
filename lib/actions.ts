@@ -5,7 +5,7 @@ import { toJSONLocal } from "./helper";
 import { State } from "./interface";
 
 
-export async function borrowItem(prevState:State, formData:any) {
+export async function borrowItem(formData:any) {
 
     const items_borrowed = COMP_PROPERTIES.reduce((acc:any, prop:any) => {
         if (formData.get(prop.trim().toLowerCase())) {
