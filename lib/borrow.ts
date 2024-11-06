@@ -11,7 +11,7 @@ export async function getBorrowed_Items(){
     return db.prepare(`SELECT * FROM property_borrowed_list where returned = 0 `).all()
 }
 
-export async function updateItem(id:number, updates:any) {
+export async function updateItem(id:string, updates:any) {
     const columns = Object.keys(updates).filter(key => updates[key] !== undefined);
     
     if (columns.length === 0) {

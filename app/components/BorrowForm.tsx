@@ -2,19 +2,39 @@
 
 import BCheckbox from "@/components/ui/bsa_checkbox/BCheckbox"
 import BDropdown from "@/components/ui/bsa_dropdown/BDropdown"
-import { borrowItem } from "@/lib/actions"
+import BToast from "@/components/ui/bsa_toast/Btoast"
 import { postBorrow } from "@/lib/Actions/borrow_records"
 import { toJSONLocal } from "@/lib/helper"
-import { Asset, State } from "@/lib/interface"
+import { Asset } from "@/lib/interface"
+import React from "react"
+import { useEffect, useState } from "react"
 import { useFormState } from "react-dom"
 
 const initialState: any = {message: '', errors: {}}
 
 export default function BorrowForm({assets}: {assets:Asset[]}) {
+    const [toastMessage, setToastMessage] = useState<string | null>(null);
     const [state, formAction] = useFormState(postBorrow, initialState) 
 
+    const formRef = React.useRef<HTMLFormElement>(null);
+    
+    useEffect(() => {
+        if (state?.message) {
+            setToastMessage(state.message);
+
+            setTimeout(() => {
+                setToastMessage(null)
+                
+            }, 2000)
+
+            if (formRef.current) {
+                formRef.current.reset();
+            }
+        }
+    }, [state]);
+
     return (
-        <form action={formAction}>
+        <form ref={formRef} action={formAction}>
         <div className="space-y-12">
             
             <div className="border-b border-gray-900/10 pb-12">
@@ -170,6 +190,7 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
           Save
         </button>
       </div>
+      {toastMessage && <BToast message={toastMessage} />}
     </form>
     )
 }

@@ -12,7 +12,7 @@ export type Asset = {
 }
 
 export type BorrowItem = {
-    id:string,
+    borrow_item_id:string,
     borrow_id: string,
     asset_id: string,
     item_status: 'borrowed' | 'returned',
@@ -20,7 +20,7 @@ export type BorrowItem = {
 }
 
 export type BorrowRecord = {
-    id:string,
+    borrow_id:string,
     borrower_name:string,
     borrower_email?:string,
     borrow_date:string,

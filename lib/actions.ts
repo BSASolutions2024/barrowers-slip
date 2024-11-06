@@ -32,7 +32,7 @@ export async function borrowItem(formData:any) {
     await saveBorrowedItems(borrowedData)
   }
 
-export default async function returnItem(id:number, item:any) {
+export default async function returnItem(id:string, item:any) {
   
   await updateItem(id, item)
 }
