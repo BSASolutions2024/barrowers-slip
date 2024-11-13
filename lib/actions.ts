@@ -2,7 +2,6 @@
 
 import { COMP_PROPERTIES, saveBorrowedItems, updateItem } from "@/lib/borrow";
 import { toJSONLocal } from "./helper";
-import { State } from "./interface";
 
 
 export async function borrowItem(formData:any) {

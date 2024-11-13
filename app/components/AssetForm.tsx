@@ -34,7 +34,7 @@ export default function AssetForm() {
             <button type="button" className="btn" onClick={() => setModal(true)}>Add</button>
             <BDialog isOpen={isOpen}>
                 <form action={formAction}>
-                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" type="button">✕</button>
+                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" type="button" onClick={() => setModal(false)}>✕</button>
                     <div className="flex flex-col">
                         <label htmlFor="asset_name" className="block text-sm font-medium leading-6 text-gray-900">
                             Name

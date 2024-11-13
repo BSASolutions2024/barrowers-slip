@@ -1,3 +1,4 @@
+import { sql } from "@vercel/postgres";
 import { Client } from "pg";
 import { z } from "zod";
 
@@ -10,23 +11,19 @@ const createUserSchema = z.object({
 export async function createUser(formData: FormData) {
   const data = createUserSchema.parse(Object.fromEntries(formData));
 
-  const client = new Client({
-    database: "custom-auth",
-  });
-
-  await client.connect();
+  const client = await sql.connect();
 
   try {
+    await client.query('BEGIN')
     // Create user record
     await client.query(
       "INSERT INTO users (uid, name, email, password) VALUES ($1::text, $2::text, $3::text, $4::text);",
       [crypto.randomUUID(), data.name, data.email, data.password]
     );
 
-    await client.end();
+    await client.query('COMMIT');
   } catch (error) {
-    await client.end();
-
+    await client.query('ROLLBACK');
     throw error;
   }
 
@@ -48,13 +45,12 @@ export async function createSession(formData: FormData) {
 
   const token = crypto.randomUUID();
 
-  const client = new Client({
-    database: "custom-auth",
-  });
+  const client = await sql.connect();
 
-  await client.connect();
 
   try {
+    await client.query('BEGIN')
+
     // Get uid
     const userResult = await client.query(
       "SELECT uid FROM users WHERE email = $1::text AND password = $2::text;",
@@ -91,9 +87,9 @@ export async function createSession(formData: FormData) {
       [token, userID]
     );
 
-    await client.end();
+    await client.query('COMMIT');
   } catch (error) {
-    await client.end();
+    await client.query('ROLLBACK');
 
     throw error;
   }
@@ -108,15 +104,13 @@ const userSchema = z.object({
 });
 
 export async function getUser(token: string) {
-  const client = new Client({
-    database: "custom-auth",
-  });
-
-  await client.connect();
+  const client = await sql.connect();
 
   let userData: any;
 
   try {
+    await client.query('BEGIN')
+
     // Get session data
     const sessionResult = await client.query(
       "SELECT uid FROM sessions WHERE token = $1::text;",
@@ -143,9 +137,9 @@ export async function getUser(token: string) {
 
     userData = userResult.rows[0];
 
-    await client.end();
+    await client.query('COMMIT');
   } catch (error) {
-    await client.end();
+    await client.query('ROLLBACK');
 
     throw error;
   }

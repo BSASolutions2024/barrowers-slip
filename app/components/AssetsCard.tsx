@@ -11,15 +11,12 @@ export default async function AssetsCard() {
     const list:Asset[] = await getAllAssets()
 
     return (
-    <>
-        <div className="card bg-base-100 w-96 shadow-md">
+        <div className="card bg-base-100 bordered">
             <div className="card-body">
                 <div className="flex flex-row w-full justify-between">
                     <h2 className="card-title">Assets</h2>
                     <AssetForm ></AssetForm>
-                    {/* <BDialog children={<AssetForm/>} isOpen={true}></BDialog> */}
                 </div>
-                {/* <AssetTable list={list}></AssetTable> */}
                 <table className="table ">
                 <thead>
                     <tr>
@@ -40,9 +37,5 @@ export default async function AssetsCard() {
             </table>
             </div>
         </div>
-        
-                
-           
-    </>
     )
 }

@@ -13,7 +13,7 @@ const BCheckbox = ({asset_id, label, name, disabled}:{asset_id?:string, label?:s
             <label className="cursor-pointer flex flex-row p-2 gap-2">
                 <Checkbox 
                     onChange={setEnabled} 
-                    className="checkbox checkbox-warning data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[checked]:data-[disabled]:bg-gray-500" 
+                    className="checkbox checkbox-primary data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[checked]:data-[disabled]:bg-gray-500" 
                     name={name} 
                     value={asset_id} 
                     disabled={disabled}></Checkbox>

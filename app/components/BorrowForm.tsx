@@ -25,9 +25,9 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
             setTimeout(() => {
                 setToastMessage(null)
                 
-            }, 2000)
+            }, 4000)
 
-            if (formRef.current) {
+            if (formRef.current && state.status) {
                 formRef.current.reset();
             }
         }

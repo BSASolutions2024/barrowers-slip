@@ -8,38 +8,18 @@ import { revalidatePath } from "next/cache";
 
 export async function getAllBorrowRecords() {
 
-    const data = await sql<BorrowRecord & BorrowItem>`SELECT * FROM borrow_records left join borrow_items on borrow_records.borrow_id = borrow_items.borrow_id
-ORDER BY borrow_records.borrow_id ASC  `;
+    const data = await sql<BorrowRecord & BorrowItem>`SELECT br.*, JSON_AGG(
+            JSON_BUILD_OBJECT(
+                'borrow_item_id', bi.borrow_item_id,
+                'asset_id', ass.asset_id,
+                'asset_name', ass.asset_name
+            )
+        ) as borrowed_items FROM borrow_records br
+    left join borrow_items bi on br.borrow_id = bi.borrow_id
+    left join assets ass on bi.asset_id = ass.asset_id
+    group by br.borrow_id order by br.borrow_date`;
 
-     // Transform the flat array into a nested structure
-  const nestedResult = data.rows.reduce((acc:any, row:any) => {
-    // Check if the borrow_id is already in the accumulator
-    let record = acc.find((r:any) => r.borrow_id === row.borrow_id);
-
-    // If it doesn't exist, create a new record entry
-    if (!record) {
-      record = {
-        borrow_id: row.borrow_id,
-        borrow_date: row.borrow_date,
-        borrower_name: row.borrower_name,
-        items: []
-      };
-      acc.push(record);
-    }
-
-    // Add each item to the items array of the current borrow record
-    if (row.item_id) {  // Check if item exists in the result
-      record.items.push({
-        item_id: row.item_id,
-        item_name: row.item_name,
-        item_status: row.item_status
-      });
-    }
-
-    return acc;
-  }, []);
-
-  return nestedResult;
+    return data.rows
 }
 
 export async function postBorrow(prevState:State, formData:FormData){
@@ -55,6 +35,7 @@ export async function postBorrow(prevState:State, formData:FormData){
         contact_no: formData.get('contact_no'),
         description: formData.get('description'),
         agreement: formData.get('agreement'),
+        borrow_status: 'open',
         created_at: (new Date()).toISOString()
     } as BorrowRecord
 
@@ -82,9 +63,10 @@ export async function postBorrow(prevState:State, formData:FormData){
             borrower_id,
             contact_no,
             description,
-            agreement
+            agreement,
+            borrow_status
             )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
             [
                 borrowRecordBody.borrow_id, 
                 borrowRecordBody.borrower_name, 
@@ -93,7 +75,8 @@ export async function postBorrow(prevState:State, formData:FormData){
                 borrowRecordBody.borrower_id,
                 borrowRecordBody.contact_no,
                 borrowRecordBody.description,
-                borrowRecordBody.agreement
+                borrowRecordBody.agreement,
+                borrowRecordBody.borrow_status
             ]
 
         )
@@ -110,6 +93,7 @@ export async function postBorrow(prevState:State, formData:FormData){
                 item.return_date
             ])
 
+            //update asset items to borrowed
             const updateAssetQuery = `UPDATE assets SET asset_status = 'borrowed' WHERE asset_id IN (${borrowItemRows.map((item:any, idx:number) => `$${idx * 1 + 1}`)})`
 
             const dataAssetBody = borrowItemRows.flatMap((item:any) => [
@@ -129,6 +113,8 @@ export async function postBorrow(prevState:State, formData:FormData){
         revalidatePath("/borrowers-list");
         revalidatePath("/");
         return {
+            code: 201,
+            status: true,
             message: 'Successfully booked'
         }
     } catch (error) {
@@ -137,5 +123,60 @@ export async function postBorrow(prevState:State, formData:FormData){
         return {
             message: 'Something went wrong'
         }
+    }
+}
+
+export async function returnBorrowedItem(borrow_record:any) {
+    const client = await sql.connect();
+    
+
+    try {
+        await client.query('BEGIN')
+
+        await client.query(`UPDATE borrow_records SET borrow_status = 'completed' WHERE borrow_id = $1`, [borrow_record.borrow_id])
+
+        
+        if(borrow_record.borrowed_items.length > 0) {
+            const borrowed_items = borrow_record.borrowed_items
+
+            //update borrow item status
+            const updateBorrowItemQuery = `UPDATE borrow_items SET item_status = 'returned' WHERE borrow_item_id IN (${borrowed_items.map((item:any, idx:number) => `$${idx * 1 + 1}`)})`
+
+            const dataBorrowedItemBody = borrowed_items.flatMap((item:any) => [
+                item.borrow_item_id,
+            ])
+
+            
+
+            //update borrowed assets to available
+            const updateAssetQuery = `UPDATE assets SET asset_status = 'available' WHERE asset_id IN (${borrowed_items.map((item:any, idx:number) => `$${idx * 1 + 1}`)})`
+
+            const dataAssetBody = borrowed_items.flatMap((item:any) => [
+                item.asset_id,
+            ])
+
+            await client.query(updateBorrowItemQuery, dataBorrowedItemBody)
+
+            await client.query(updateAssetQuery, dataAssetBody)
+
+        }
+
+        await client.query('COMMIT');
+        revalidatePath("/borrowers-list");
+        revalidatePath("/");
+
+        return {
+            code: 201,
+            status: true,
+            message: 'Thank you for returning the item(s)'
+        }
+    } catch (error) {
+        console.error('Error', error);
+        await client.query('ROLLBACK');
+        return {
+            message: 'Something went wrong'
+        }
+    }finally {
+        client.release();  // Ensure connection is released after each use
     }
 }
