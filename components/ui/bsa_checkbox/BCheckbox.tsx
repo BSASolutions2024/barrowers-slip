@@ -16,8 +16,10 @@ const BCheckbox = ({asset_id, label, name, disabled}:{asset_id?:string, label?:s
                     className="checkbox checkbox-primary data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[checked]:data-[disabled]:bg-gray-500" 
                     name={name} 
                     value={asset_id} 
-                    disabled={disabled}></Checkbox>
-                <span className="label-text">{label} {disabled ? 'Not Available' : ''}</span>
+                    disabled={disabled}
+                    defaultChecked={false}
+                    ></Checkbox>
+                <span className="label-text text-sm text-justify">{label} {disabled ? 'Not Available' : ''}</span>
             </label>
         </div>
     );

@@ -1,3 +1,4 @@
+import { hashUserPassword, verifyPassword } from "@/lib/hash";
 import { sql } from "@vercel/postgres";
 import { Client } from "pg";
 import { z } from "zod";
@@ -13,12 +14,14 @@ export async function createUser(formData: FormData) {
 
   const client = await sql.connect();
 
+  const hashedPassword = hashUserPassword(data.password)
+
   try {
     await client.query('BEGIN')
     // Create user record
     await client.query(
       "INSERT INTO users (uid, name, email, password) VALUES ($1::text, $2::text, $3::text, $4::text);",
-      [crypto.randomUUID(), data.name, data.email, data.password]
+      [crypto.randomUUID(), data.name, data.email, hashedPassword]
     );
 
     await client.query('COMMIT');
@@ -52,9 +55,14 @@ export async function createSession(formData: FormData) {
     await client.query('BEGIN')
 
     // Get uid
+    // const userResult = await client.query(
+    //   "SELECT uid FROM users WHERE email = $1::text AND password = $2::text;",
+    //   [data.email, data.password]
+    // );
+
     const userResult = await client.query(
-      "SELECT uid FROM users WHERE email = $1::text AND password = $2::text;",
-      [data.email, data.password]
+      "SELECT uid, password FROM users WHERE email = $1::text",
+      [data.email]
     );
 
     const userRow = userResult.rows[0];
@@ -64,6 +72,16 @@ export async function createSession(formData: FormData) {
     }
 
     const userID = userRow.uid;
+
+    const storedHashedPassword = userRow.password;
+
+    
+    // Verify the supplied password with the stored hashed password
+    const isPasswordValid = verifyPassword(storedHashedPassword, data.password);
+
+    if (!isPasswordValid) {
+      throw new Error("Invalid password");
+    }
 
     if (!userID || typeof userID !== "string") {
       throw new Error("Invalid user record");

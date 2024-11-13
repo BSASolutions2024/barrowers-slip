@@ -6,6 +6,7 @@ import BToast from "@/components/ui/bsa_toast/Btoast"
 import { postBorrow } from "@/lib/Actions/borrow_records"
 import { toJSONLocal } from "@/lib/helper"
 import { Asset } from "@/lib/interface"
+import { redirect } from "next/navigation"
 import React from "react"
 import { useEffect, useState } from "react"
 import { useFormState } from "react-dom"
@@ -15,8 +16,24 @@ const initialState: any = {message: '', errors: {}}
 export default function BorrowForm({assets}: {assets:Asset[]}) {
     const [toastMessage, setToastMessage] = useState<string | null>(null);
     const [state, formAction] = useFormState(postBorrow, initialState) 
-
     const formRef = React.useRef<HTMLFormElement>(null);
+    const [formData, setFormData] = useState({
+        borrower_name: '',
+        borrower_id: '',
+        location: '',
+        contact_no: '',
+        description: '',
+        date_borrowed: '',
+        return_date: ''
+    })
+
+    const handleChange = (e:any) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+      };
     
     useEffect(() => {
         if (state?.message) {
@@ -24,11 +41,19 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
 
             setTimeout(() => {
                 setToastMessage(null)
-                
             }, 4000)
 
             if (formRef.current && state.status) {
                 formRef.current.reset();
+                setFormData({
+                    borrower_name: '',
+                    borrower_id: '',
+                    location: '',
+                    contact_no: '',
+                    description: '',
+                    date_borrowed: '',
+                    return_date: ''
+                })
             }
         }
     }, [state]);
@@ -137,35 +162,40 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
                 </div>
 
                 <div className="flex flex-col">
-                <label htmlFor="date_borrowed" className="block text-sm font-medium leading-6 text-gray-900">
-                    Date Borrowed
-                </label>
-                <div className="mt-2">
-                    <input
-                    id="date_borrowed"
-                    name="date_borrowed"
-                    type="date"
-                    className="input input-bordered w-full"
-                    />
-                </div>
+                    <label htmlFor="date_borrowed" className="block text-sm font-medium leading-6 text-gray-900">
+                        Date Borrowed
+                    </label>
+                    <div className="mt-2">
+                        <input
+                        id="date_borrowed"
+                        name="date_borrowed"
+                        type="date"
+                        className="input input-bordered w-full"
+                        min={toJSONLocal(new Date())}
+                        value={formData.date_borrowed}
+                        onChange={handleChange}
+                        />
+                    </div>
                 </div>
 
                 <div className="flex flex-col">
-                <label htmlFor="return_date" className="block text-sm font-medium leading-6 text-gray-900">
-                    Expected return date
-                </label>
-                <div className="mt-2">
-                    <input
-                    id="return_date"
-                    name="return_date"
-                    type="date"
-                    className="input input-bordered w-full"
-                    />
-                </div>
+                    <label htmlFor="return_date" className="block text-sm font-medium leading-6 text-gray-900">
+                        Expected return date
+                    </label>
+                    <div className="mt-2">
+                        <input
+                        id="return_date"
+                        name="return_date"
+                        type="date"
+                        min={formData.date_borrowed || toJSONLocal(new Date())}
+                        className="input input-bordered w-full"
+                        onChange={handleChange}
+                        />
+                    </div>
                 </div>
 
                 <div className="flex flex-row gap-2">
-                <BCheckbox name="agreement"/>
+                <BCheckbox name="agreement" />
                 <p>I hereby acknowledge that I have received the above-mentioned property and will use it solely for the purpose it was intended. I understand that I am fully responsible for the said property while it is under my care and that any damage, loss, or theft will be my sole responsibility.
                     I agree to return the property on or before the expected return date indicated above. I also understand that failure to return the property on the said date will be subject to penalties as may be determined by the company. </p>
                 <div className="mt-2">

@@ -17,7 +17,7 @@ export default function Form() {
           name="name"
           placeholder="Enter your name"
           required
-          className="border border-zinc-800 p-2 rounded"
+          className="border p-2 rounded"
         />
 
         <input
@@ -25,7 +25,7 @@ export default function Form() {
           name="email"
           placeholder="Enter your email"
           required
-          className="border border-zinc-800 p-2 rounded"
+          className="border p-2 rounded"
         />
 
         <input
@@ -33,7 +33,7 @@ export default function Form() {
           name="password"
           placeholder="Enter your password"
           required
-          className="border border-zinc-800 p-2 rounded"
+          className="border p-2 rounded"
         />
       </div>
 
@@ -51,7 +51,8 @@ export default function Form() {
         hover:opacity-80 
         disabled:bg-zinc-700 disabled:opacity-100
         focus:outline-2 focus:outline-sky-400 focus:outline-offset-2 focus:outline
-        disabled:outline-none"
+        disabled:outline-none
+        btn"
       tabIndex={-1}
       disabled={signupStatus.pending}
     >

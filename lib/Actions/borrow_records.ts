@@ -17,7 +17,7 @@ export async function getAllBorrowRecords() {
         ) as borrowed_items FROM borrow_records br
     left join borrow_items bi on br.borrow_id = bi.borrow_id
     left join assets ass on bi.asset_id = ass.asset_id
-    group by br.borrow_id order by br.borrow_date`;
+    group by br.borrow_id order by br.borrow_status DESC, br.borrow_date DESC `;
 
     return data.rows
 }

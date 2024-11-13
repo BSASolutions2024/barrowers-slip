@@ -20,9 +20,9 @@ export default async function Signup() {
 
     user = await getUser(tokenCookie);
   } catch (error) {
-    // console.log(error);
+    console.log(error);
   }
-  console.log(user)
+
   if (user) {
     redirect("/borrowers-list");
   }
@@ -33,8 +33,9 @@ export default async function Signup() {
         className="
           flex flex-col gap-6 
           p-8 
-          border rounded-lg border-zinc-900
-          w-[30rem]"
+          mt-10
+          border rounded-lg
+          w-[30rem] border-slate-400"
       >
         <header className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold">Sign up</h1>

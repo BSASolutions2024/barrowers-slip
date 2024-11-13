@@ -27,12 +27,13 @@ export default async function LoginPage() {
       <main
         className="
           flex flex-col gap-6 
-          p-8 
-          border rounded-lg border-zinc-900 
+          p-8
+          mt-10
+          border rounded-lg border-slate-400
           w-[30rem]"
       >
         <header className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold">Log in</h1>
+          <h1 className="text-3xl font-bold">Hi Admin</h1>
 
           <p className="text-zinc-400">Log into your account.</p>
         </header>

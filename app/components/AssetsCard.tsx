@@ -23,6 +23,7 @@ export default async function AssetsCard() {
                         <th>Name</th>
                         <th>Type</th>
                         <th>Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,7 +31,14 @@ export default async function AssetsCard() {
                         <tr key={i.asset_id}>
                             <td>{i.asset_name}</td>
                             <td>{i.asset_type}</td>
-                            <td>{i.asset_status}</td>
+                            <td className="flex">
+                                <span className={`${i.asset_status !== 'available' ? 'badge-warning' : 'badge-success'} badge p-3`}>
+                                    {i.asset_status}
+                                </span>
+                            </td>
+                            <td>
+                                
+                            </td>
                         </tr>
                     ) )}
                 </tbody>
