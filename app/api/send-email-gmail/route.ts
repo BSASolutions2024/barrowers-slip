@@ -6,11 +6,11 @@ export async function POST(req:any) {
     // }
 
     try {
-        const { to, subject, text } = await req.json();
+        const { to, subject, text, html } = await req.json();
     
         const transporter = nodemailer.createTransport({
-            service: 'smtp.gmail.com',
-            port: 587,
+            host: 'smtp.gmail.com',
+            port: 465,
             secure: true,
             auth: {
                 user: process.env.GMAIL_USER,
@@ -23,6 +23,7 @@ export async function POST(req:any) {
           to,
           subject,
           text,
+          html,
         });
     
         return new Response(JSON.stringify({ message: 'Email sent successfully!' }), {

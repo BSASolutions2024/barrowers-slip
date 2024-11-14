@@ -40,24 +40,3 @@ export async function deleteItem(id:number) {
   console.log("this is id", id)
 }
 
-export async function sendNotification(body:any) {
-    const response = await fetch('/api/send-email-gmail', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        to: 'recipient@example.com', 
-        subject: 'Test Email',
-        text: 'Hello! This is a test email from Next.js',
-      }),
-    });
-
-    console.log(response)
-    return response
-    // if (response.ok) {
-    //   setEmailSent(true);
-    // } else {
-    //   console.error('Failed to send email');
-    // }
-}

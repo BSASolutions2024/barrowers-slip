@@ -9,7 +9,7 @@ export async function POST(req:any, res:any) {
     try {
         // Create a transporter using Outlook SMTP settings
         const transporter = nodemailer.createTransport({
-          host: 'smtp.office365.com',  // Outlook SMTP server
+          host: 'smtp-mail.outlook.com',  // Outlook SMTP server
           port: 587,                   // SMTP port for Office 365
           secure: false,               // TLS is required, so 'secure' must be false
           auth: {

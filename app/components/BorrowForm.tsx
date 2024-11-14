@@ -6,7 +6,6 @@ import BToast from "@/components/ui/bsa_toast/Btoast"
 import { postBorrow } from "@/lib/Actions/borrow_records"
 import { toJSONLocal } from "@/lib/helper"
 import { Asset } from "@/lib/interface"
-import { redirect } from "next/navigation"
 import React from "react"
 import { useEffect, useState } from "react"
 import { useFormState } from "react-dom"
@@ -38,7 +37,7 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
     useEffect(() => {
         if (state?.message) {
             setToastMessage(state.message);
-
+            // testNotif(formData)
             setTimeout(() => {
                 setToastMessage(null)
             }, 4000)
@@ -58,24 +57,43 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
         }
     }, [state]);
 
-    const testNotif = async() => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/send-email-gmail`, {
+    
+
+    const testNotif = async(body:any) => {
+        const htmlContent = `
+                            <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; padding: 20px;">
+                            <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px;">
+                                
+                                <h1 style="text-align: center; color: #4CAF50;">Borrower's Slip</h1>
+                                <p style="text-align: center;">New request from <strong>${body.borrower_name}</strong></p>
+                                
+                                <div style="margin-bottom: 20px;">
+                                <p><strong>Borrower Name:</strong> ${body.borrower_name}</p>
+                                <a href="https://barrowers-slip.vercel.app/borrowers-list">Visit Borrowers List</a>
+                                </div>
+
+                                <p style="margin-top: 20px; font-size: 14px; color: #777;">Thank you for using our service!</p>
+                                <p style="font-size: 14px; color: #777;">If you have any questions, please contact us.</p>
+                            </div>
+                            </div>
+                        `;
+        await fetch(`/api/send-email-gmail`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              to: 'john.e@yopmail.com', 
-              subject: 'Test Email',
-              text: 'Hello! This is a test email from Next.js',
+              to: 'john.parot@bsasolutions-inc.com', 
+              subject: `Hi, New request from ${body.borrower_name}`,
+              text: `New request from ${body.borrower_name}`,
+              html: htmlContent
             }),
           });
-          console.log(response)
+
     }
 
     return (
         <form ref={formRef} action={formAction}>
-            <button type="button" onClick={testNotif} className="btn">Send Test Email</button>
         <div className="space-y-12">
             
             <div className="border-b border-gray-900/10 pb-12">
@@ -107,6 +125,8 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
                     id="borrower_name"
                     name="borrower_name"
                     type="text"
+                    value={formData.borrower_name}
+                    onChange={handleChange}
                     className="input input-bordered w-full"
                     />
                 </div>

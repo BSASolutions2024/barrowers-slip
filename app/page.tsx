@@ -4,12 +4,6 @@ import BorrowForm from "./components/BorrowForm";
 
 export default async function Home() {
   const comp_properties = await getAllAssets()
-
-  // const borrowedItems = await getBorrowed_Items()
-
-  // const arrayofItems = borrowedItems.map((item:any) => {
-  //   return item.items_borrowed.split(',').map((i:string) => i.trim());
-  // }).flat()
   
   return (
     <div className="lg:w-[50%]  mx-auto mb-20 lg:px-0 px-10">
