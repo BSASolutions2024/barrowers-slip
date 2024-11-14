@@ -58,8 +58,24 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
         }
     }, [state]);
 
+    const testNotif = async() => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/send-email-gmail`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              to: 'john.e@yopmail.com', 
+              subject: 'Test Email',
+              text: 'Hello! This is a test email from Next.js',
+            }),
+          });
+          console.log(response)
+    }
+
     return (
         <form ref={formRef} action={formAction}>
+            <button type="button" onClick={testNotif} className="btn">Send Test Email</button>
         <div className="space-y-12">
             
             <div className="border-b border-gray-900/10 pb-12">
