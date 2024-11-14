@@ -37,7 +37,7 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
     useEffect(() => {
         if (state?.message) {
             setToastMessage(state.message);
-            // testNotif(formData)
+            testNotif(formData)
             setTimeout(() => {
                 setToastMessage(null)
             }, 4000)
@@ -62,19 +62,16 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
     const testNotif = async(body:any) => {
         const htmlContent = `
                             <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; padding: 20px;">
-                            <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px;">
-                                
-                                <h1 style="text-align: center; color: #4CAF50;">Borrower's Slip</h1>
-                                <p style="text-align: center;">New request from <strong>${body.borrower_name}</strong></p>
-                                
-                                <div style="margin-bottom: 20px;">
-                                <p><strong>Borrower Name:</strong> ${body.borrower_name}</p>
-                                <a href="https://barrowers-slip.vercel.app/borrowers-list">Visit Borrowers List</a>
+                                <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px;">
+                                    
+                                    <h1 style="text-align: center; color: #4CAF50;">Borrower's Slip</h1>
+                                    <p style="text-align: center;">New request from <strong>${body.borrower_name}</strong></p>
+                                    
+                                    <div style="margin-bottom: 20px;">
+                                    <p><strong>Borrower Name:</strong> ${body.borrower_name}</p>
+                                    <a href="https://barrowers-slip.vercel.app/borrowers-list">Visit Borrowers List</a>
+                                    </div>
                                 </div>
-
-                                <p style="margin-top: 20px; font-size: 14px; color: #777;">Thank you for using our service!</p>
-                                <p style="font-size: 14px; color: #777;">If you have any questions, please contact us.</p>
-                            </div>
                             </div>
                         `;
         await fetch(`/api/send-email-gmail`, {
