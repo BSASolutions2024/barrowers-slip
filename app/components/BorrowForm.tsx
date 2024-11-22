@@ -60,12 +60,11 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
     
 
     const testNotif = async(body:any) => {
-        const htmlContent = `
-                            <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; padding: 20px;">
+        const htmlContent = `<div style="font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; padding: 20px;">
                                 <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px;">
                                     
                                     <h1 style="text-align: center; color: #4CAF50;">Borrower's Slip</h1>
-                                    <p style="text-align: center;">New request from <strong>${body.borrower_name}</strong></p>
+                                    <p style="text-align: center;">New Request</p>
                                     
                                     <div style="margin-bottom: 20px;">
                                     <p><strong>Borrower Name:</strong> ${body.borrower_name}</p>
@@ -80,7 +79,7 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              to: 'john.parot@bsasolutions-inc.com', 
+              to: 'john.parot@bsasolutions-inc.com, marimar.delatorre@bsasolutions-inc.com', 
               subject: `Hi, New request from ${body.borrower_name}`,
               text: `New request from ${body.borrower_name}`,
               html: htmlContent
