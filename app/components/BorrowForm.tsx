@@ -6,6 +6,7 @@ import BToast from "@/components/ui/bsa_toast/Btoast"
 import { postBorrow } from "@/lib/Actions/borrow_records"
 import { toJSONLocal } from "@/lib/helper"
 import { Asset } from "@/lib/interface"
+import { useTheme } from "next-themes"
 import React from "react"
 import { useEffect, useState } from "react"
 import { useFormState } from "react-dom"
@@ -13,6 +14,10 @@ import { useFormState } from "react-dom"
 const initialState: any = {message: '', errors: {}}
 
 export default function BorrowForm({assets}: {assets:Asset[]}) {
+    const { setTheme } = useTheme()
+
+    
+
     const [toastMessage, setToastMessage] = useState<string | null>(null);
     const [state, formAction] = useFormState(postBorrow, initialState) 
     const formRef = React.useRef<HTMLFormElement>(null);
@@ -93,11 +98,11 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
         <div className="space-y-12">
             
             <div className="border-b border-gray-900/10 pb-12">
-            <h2 className="text-base font-semibold leading-7 text-gray-900">Please complete the form</h2>
+            <h2 className="text-base font-semibold leading-7">Please complete the form</h2>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8">
                 <div className="flex flex-col">
-                <label htmlFor="borrow_date" className="block text-sm font-medium leading-6 text-gray-900">
+                <label htmlFor="borrow_date" className="block text-sm font-medium leading-6">
                     Date
                 </label>
                 <div className="mt-2">
@@ -113,7 +118,7 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
                 </div>
 
                 <div className="flex flex-col">
-                <label htmlFor="borrower_name" className="block text-sm font-medium leading-6 text-gray-900">
+                <label htmlFor="borrower_name" className="block text-sm font-medium leading-6">
                     Borrower's Name
                 </label>
                 <div className="mt-2">
@@ -129,7 +134,7 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
                 </div>
 
                 <div className="flex flex-col">
-                <label htmlFor="borrower_id" className="block text-sm font-medium leading-6 text-gray-900">
+                <label htmlFor="borrower_id" className="block text-sm font-medium leading-6">
                     Borrower's ID
                 </label>
                 <div className="mt-2">
@@ -142,7 +147,7 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
                 </div>
                 </div>
                 <div className="flex flex-col">
-                <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
+                <label htmlFor="location" className="block text-sm font-medium leading-6">
                     Location
                 </label>
                 <div className="mt-2">
@@ -151,7 +156,7 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
                 </div>
 
                 <div className="flex flex-col">
-                <label htmlFor="contact_no" className="block text-sm font-medium leading-6 text-gray-900">
+                <label htmlFor="contact_no" className="block text-sm font-medium leading-6">
                     Contact #
                 </label>
                 <div className="mt-2">
@@ -165,7 +170,7 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
                 </div>
 
                 <div className="flex flex-col">
-                <label htmlFor="asset" className="block text-sm font-medium leading-6 text-gray-900">
+                <label htmlFor="asset" className="block text-sm font-medium leading-6">
                     Item(s) to borrow
                 </label>
                 <div className="mt-2">
@@ -182,7 +187,7 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
                 </div>
 
                 <div className="flex flex-col">
-                <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
+                <label htmlFor="description" className="block text-sm font-medium leading-6">
                     Description
                 </label>
                 <div className="mt-2">
@@ -194,7 +199,7 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
                 </div>
 
                 <div className="flex flex-col">
-                    <label htmlFor="date_borrowed" className="block text-sm font-medium leading-6 text-gray-900">
+                    <label htmlFor="date_borrowed" className="block text-sm font-medium leading-6">
                         Date Borrowed
                     </label>
                     <div className="mt-2">
@@ -211,7 +216,7 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
                 </div>
 
                 <div className="flex flex-col">
-                    <label htmlFor="return_date" className="block text-sm font-medium leading-6 text-gray-900">
+                    <label htmlFor="return_date" className="block text-sm font-medium leading-6">
                         Expected return date
                     </label>
                     <div className="mt-2">
@@ -242,7 +247,7 @@ export default function BorrowForm({assets}: {assets:Asset[]}) {
         </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
-        <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+        <button type="button" className="text-sm font-semibold leading-6">
           Cancel
         </button>
         <button
