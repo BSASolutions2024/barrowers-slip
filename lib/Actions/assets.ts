@@ -8,7 +8,7 @@ import { cache } from "react";
 
 export const getAllAssets = cache(async function getAllAssets() {
 
-    const data = await sql<Asset>`SELECT * FROM assets order by created_at desc limit 10 `;
+    const data = await sql<Asset>`SELECT * FROM assets order by created_at desc`;
 
     return data.rows
 })
