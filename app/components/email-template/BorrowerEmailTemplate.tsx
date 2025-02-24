@@ -56,7 +56,7 @@ export default function BorrowerEmailTemplate({
           <p>Hi ${borrowRecord.borrower_name},</p><br>
           <p>We sincerely appreciate your prompt return of the borrowed item(s).</p>
           <p>If you need to borrow any items in the future click the link below or have any questions, please feel free to reach out.</p><br>
-          <a href="borrower-slip.vercel.app">Borrower Slip</a>
+          <a href="https://borrowers-slip.vercel.app">Borrower Slip</a>
         </div>
         <div style="margin-top: 20px;
               font-size: 14px;
