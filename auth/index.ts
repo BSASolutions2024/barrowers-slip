@@ -1,5 +1,7 @@
+import {pool} from "@/db";
 import { hashUserPassword, verifyPassword } from "@/lib/hash";
-import { sql } from "@vercel/postgres";
+import { NextResponse } from "next/server";
+// import { sql } from "@vercel/postgres";
 import { Client } from "pg";
 import { z } from "zod";
 
@@ -10,32 +12,34 @@ const createUserSchema = z.object({
 });
 
 export async function createUser(formData: FormData) {
-  const data = createUserSchema.parse(Object.fromEntries(formData));
 
-  const client = await sql.connect();
-
-  const hashedPassword = hashUserPassword(data.password)
-
+  const client = await pool.connect()
+  
   try {
-    await client.query('BEGIN')
+    const data = createUserSchema.parse(Object.fromEntries(formData));
+  
+    const hashedPassword = hashUserPassword(data.password)
+
     // Create user record
     await client.query(
       "INSERT INTO users (uid, name, email, password) VALUES ($1::text, $2::text, $3::text, $4::text);",
       [crypto.randomUUID(), data.name, data.email, hashedPassword]
     );
 
-    await client.query('COMMIT');
-  } catch (error) {
-    await client.query('ROLLBACK');
-    throw error;
+    let sessionFormData = new FormData();
+
+    sessionFormData.append("email", data.email);
+    sessionFormData.append("password", data.password);
+
+    return createSession(sessionFormData);
+
+  } catch (error:any) {
+    return NextResponse.json({error: 'Something went wrong', details: error.message})
+  } finally {
+    client.release()
   }
 
-  let sessionFormData = new FormData();
-
-  sessionFormData.append("email", data.email);
-  sessionFormData.append("password", data.password);
-
-  return createSession(sessionFormData);
+  
 }
 
 const createSessionSchema = z.object({
@@ -44,11 +48,14 @@ const createSessionSchema = z.object({
 });
 
 export async function createSession(formData: FormData) {
+
+  const client = await pool.connect()
+
   const data = createSessionSchema.parse(Object.fromEntries(formData));
 
   const token = crypto.randomUUID();
 
-  const client = await sql.connect();
+  // const client = await sql.connect();
 
 
   try {
@@ -110,6 +117,8 @@ export async function createSession(formData: FormData) {
     await client.query('ROLLBACK');
 
     throw error;
+  } finally {
+    client.release()
   }
 
   return token;
@@ -122,7 +131,9 @@ const userSchema = z.object({
 });
 
 export async function getUser(token: string) {
-  const client = await sql.connect();
+
+  const client = await pool.connect()
+  // const client = await sql.connect();
 
   let userData: any;
 

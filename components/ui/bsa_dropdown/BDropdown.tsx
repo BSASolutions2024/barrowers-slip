@@ -1,14 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { cn } from '@/lib/utils'
 
-export default function BDropdown({name}:{name:string}) {
+const BDropdown =(props:any) => {
   
     return (
-        <select className="select select-bordered w-full" name={name} defaultValue="">
+        <select className={cn("select select-bordered w-full", props.className)} name={props.name} {...props.register} defaultValue="">
             <option disabled value="">Select Location</option>
             <option value="bsa">BSA</option>
             <option value="5elk">5ELK</option>
         </select>
     )
 }
+
+export default BDropdown

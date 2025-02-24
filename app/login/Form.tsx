@@ -1,54 +1,95 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { LoginFormValues, loginSchema } from "@/lib/schemas/userSchema";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "@/hooks/use-toast";
 import { loginAction } from "./actions";
+import { useRouter } from "next/navigation";
 
 export default function Form() {
-  const loginStatus = useFormStatus();
-  const [state, action] = useFormState(loginAction, {
-    error: "",
+  const router = useRouter()
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
   });
 
+  const loginFormHandler = async(data:LoginFormValues) => {
+    setIsLoading(true)
+
+    try{
+      const formData = new FormData()
+
+      formData.append("email", data.email)
+      formData.append("password", data.password)
+
+      let response:any = await loginAction(null, formData)
+
+      if(response?.error) {
+        toast({ title: "Error", description: response?.error, variant: "destructive" });
+      } else {
+        router.push('/borrowers-list')
+      }
+
+    }catch(error:any){
+      toast({ title: "Error", description: error.error.message, variant: "destructive" });
+    }finally{
+      setIsLoading(false)
+    }
+  };
+
+  // const loginStatus = useFormStatus();
+  // const [state, action] = useFormState(loginAction, {
+  //   error: "",
+  // });
 
   return (
-    <form action={action} className="flex flex-col gap-4">
+    <form
+      onSubmit={handleSubmit(loginFormHandler)}
+      className="flex flex-col gap-4"
+    >
       <div className="flex flex-col gap-3">
-        <input
+        {errors.email && (
+          <p className="text-error text-sm">{errors.email.message}</p>
+        )}
+        <Input
           type="email"
-          name="email"
           placeholder="Enter your email"
-          required
           className="border p-2 rounded"
+          {...register("email")}
         />
-
-        <input
+        {errors.password && (
+          <p className="text-error text-sm">{errors.password.message}</p>
+        )}
+        <Input
           type="password"
-          name="password"
           placeholder="Enter your password"
-          required
           className="border p-2 rounded"
+          {...register("password")}
         />
       </div>
 
-      {state.error !== "" ? (
-        <p className="text-rose-500 text-sm">{state.error}</p>
-      ) : null}
-
       <button
-            className="
+        className="
               bg-white 
               text-black 
               p-2 
               rounded-md 
               transition 
-              hover:opacity-80 
-              disabled:bg-zinc-700 disabled:opacity-100
               disabled:outline-none btn"
-            tabIndex={-1}
-            disabled={loginStatus.pending}
-          >
-            {loginStatus.pending ? "Loading" : "Log in"}
-        </button>
+        tabIndex={-1}
+        disabled={isLoading}
+      >
+        {isLoading ? "Loading" : "Log in"}
+      </button>
     </form>
   );
 }

@@ -21,15 +21,16 @@ export default async function LoginPage() {
   if (user) {
     redirect("/borrowers-list");
   }
-  
-    return (
-        <div className="grid place-items-center flex-grow">
+
+  return (
+    <div className="grid place-items-center flex-grow">
       <main
         className="
           flex flex-col gap-6 
           p-8
           mt-10
           border rounded-lg border-slate-400
+          bg-accent
           w-[30rem]"
       >
         <header className="flex flex-col gap-2">
@@ -41,5 +42,5 @@ export default async function LoginPage() {
         <Form />
       </main>
     </div>
-    )
+  );
 }

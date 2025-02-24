@@ -11,7 +11,7 @@ export default async function AdminHeader({user}: {user:any}) {
 
     return(
         <header>
-            <div className="lg:flex lg:items-center lg:justify-between py-4 px-2 my-8">
+            <div className="lg:flex lg:items-center lg:justify-between py-4 px-2">
                 <div className="min-w-0 flex-1">
                     <h2 className="font-bold text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
                         Welcome back, Admin {user.name}

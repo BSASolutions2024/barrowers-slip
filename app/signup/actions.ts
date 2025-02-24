@@ -8,7 +8,7 @@ import { ZodError } from "zod";
 export async function signupAction(_: any, formData: FormData) {
 
   try {
-    const result = await createUser(formData);
+    const result:any = await createUser(formData);
     cookies().set("token", result);
   } catch (error) {
     if (error instanceof ZodError) {

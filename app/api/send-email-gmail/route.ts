@@ -19,7 +19,7 @@ export async function POST(req:any) {
         });
     
         await transporter.sendMail({
-          from: process.env.GMAIL_USER,
+          from: `"BSA - Marketing" <${process.env.GMAIL_USER}>`,
           to,
           subject,
           text,

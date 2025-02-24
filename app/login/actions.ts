@@ -1,8 +1,7 @@
 "use server";
 import { createSession } from "@/auth";
 import { cookies } from "next/headers";
-
-import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 
 export async function loginAction(_: any, formData: FormData) {
@@ -10,7 +9,9 @@ export async function loginAction(_: any, formData: FormData) {
     const result = await createSession(formData);
 
     cookies().set("token", result);
+
   } catch (error) {
+    console.log({error})
     if (error instanceof ZodError) {
       return {
         error: error.errors[0].message,
@@ -24,9 +25,7 @@ export async function loginAction(_: any, formData: FormData) {
     }
 
     return {
-      error: "Unknown error occured while loggin in",
+      error: "Unknown error occurred while logging in",
     };
   }
-
-  redirect("/borrowers-list");
 }

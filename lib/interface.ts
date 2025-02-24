@@ -22,7 +22,7 @@ export type BorrowItem = {
 export type BorrowRecord = {
     borrow_id:string,
     borrower_name:string,
-    borrower_email?:string,
+    borrower_email:string,
     borrow_date:string,
     return_date:string,
     borrow_status?: 'open' | 'completed',
