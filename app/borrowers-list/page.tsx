@@ -31,7 +31,7 @@ export default async function BorrowersList() {
           <AssetsCard></AssetsCard>
         </div>
         <div className="flex-1 basis-2/3">
-          {/* <BorrowersCard></BorrowersCard> */}
+          <BorrowersCard></BorrowersCard>
         </div>
       </main>
     </div>
