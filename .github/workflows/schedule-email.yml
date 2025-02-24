@@ -2,7 +2,7 @@ name: Schedule API Call for Overdue Items
 
 on:
   schedule:
-    - cron: '0 17 * * *'
+    - cron: '10 9 * * *'
 
 jobs:
   send-overdue-email:
