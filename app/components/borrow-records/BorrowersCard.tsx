@@ -32,7 +32,6 @@ export default function BorrowersCard() {
 
   const mutation = useMutation({
     mutationFn: async (record: any) => {
-      console.log(record);
       const response = await fetch(`/api/borrow/${record.borrow_id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
