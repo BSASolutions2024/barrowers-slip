@@ -1,0 +1,12 @@
+name: Schedule API Call for Overdue Items
+
+on:
+  schedule:
+    - cron: '0 17 * * *'
+
+jobs:
+  send-overdue-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call API to Send Overdue Email
+        run: curl -X POST "https://borrower-slip.vercel.app/api/check-overdue"
