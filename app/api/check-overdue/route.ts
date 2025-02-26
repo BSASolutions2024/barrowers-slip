@@ -51,11 +51,9 @@ export async function POST() {
           }),
         }
       );
-
-      console.log(response);
     }
 
-    return NextResponse.json({ message: "Email sent" }, { status: 200 });
+    return NextResponse.json({ message: "Email sent", data: response }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({
       error: "Something went wrong",
