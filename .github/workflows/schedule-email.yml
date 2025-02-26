@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Call API to Send Overdue Email
-        run: curl -X POST "https://borrower-slip.vercel.app/api/check-overdue"
+        run: curl -X POST "borrowers-slip.vercel.app/api/check-overdue"
