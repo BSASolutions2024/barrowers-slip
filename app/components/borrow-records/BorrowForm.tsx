@@ -68,7 +68,7 @@ export default function BorrowForm(props: any) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            to: "john.parot@bsasolutions-inc.com, marimar.delatorre@bsasolutions-inc.com",
+            to: "john.parot@bsasolutions-inc.com, marimar.delatorre@bsasolutions-inc.com, gabrielle.gentallan@bsasolutions-inc.com",
             subject: `Hi, New request from ${borrowRecord.borrower_name}`,
             html: AdminEmailTemplate({
               borrowRecord,
