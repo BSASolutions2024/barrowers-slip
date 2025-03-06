@@ -43,6 +43,7 @@ CREATE TABLE "borrow_records" (
     "contact_no" TEXT,
     "description" TEXT,
     "agreement" BOOLEAN,
+    "location" TEXT,
 
     CONSTRAINT "borrow_records_pkey" PRIMARY KEY ("borrow_id")
 );
@@ -92,9 +93,6 @@ CREATE TABLE "users" (
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "admins_email_key" ON "admins"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "property_borrowed_list_slug_key" ON "property_borrowed_list"("slug");

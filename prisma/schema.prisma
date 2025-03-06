@@ -10,7 +10,7 @@ datasource db {
 model admins {
   admin_id       String           @id @db.Uuid
   name           String
-  email          String           @unique
+  email          String
   borrow_records borrow_records[]
 }
 
@@ -20,7 +20,7 @@ model assets {
   asset_type   String?
   asset_status String
   category_id  String?        @db.Uuid
-  created_at   DateTime?      @default(now()) @db.Timestamptz(6)
+  created_at   DateTime?      @db.Timestamptz(6)
   categories   categories?    @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "category_id_fkey")
   borrow_items borrow_items[]
 }
@@ -31,7 +31,7 @@ model borrow_items {
   asset_id       String         @db.Uuid
   item_status    String?
   return_date    DateTime?      @db.Date
-  assets         assets         @relation(fields: [asset_id], references: [asset_id], onDelete: Cascade, onUpdate: NoAction, map: "asset_id_fkey")
+  assets         assets         @relation(fields: [asset_id], references: [asset_id], onDelete: NoAction, onUpdate: NoAction, map: "asset_id_fkey")
   borrow_records borrow_records @relation(fields: [borrow_id], references: [borrow_id], onDelete: NoAction, onUpdate: NoAction, map: "borrow_id_fkey")
 }
 
@@ -87,10 +87,4 @@ model users {
   email    String    @unique
   password String
   sessions sessions?
-}
-
-model prisma_migrations {
-  id             Int       @id @default(autoincrement())
-  migration_name String    @db.VarChar(255)
-  applied_at     DateTime? @default(now()) @db.Timestamp(6)
 }
