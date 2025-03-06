@@ -1,5 +1,6 @@
 import OverdueReminderEmailTemplate from "@/app/components/email-template/OverdueReminderEmailTemplate";
 import { prisma } from "@/db";
+import APIErrorHandler from "@/lib/APIErrorHandler";
 import { NextResponse } from "next/server";
 
 export async function POST() {
@@ -7,16 +8,17 @@ export async function POST() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
 
   try {
     const response = await prisma.borrow_records.findMany({
       where: {
         borrow_status: "open",
         return_date: {
-          gte: today,
-          lt: tomorrow,
+          gte: yesterday,
+          lt: today,
         },
       },
       orderBy: [{ borrow_status: "desc" }, { borrow_date: "desc" }],
@@ -34,7 +36,7 @@ export async function POST() {
         (asset: any) => asset.assets.asset_name
       );
 
-      const response = await fetch(
+      await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/send-email-gmail`,
         {
           method: "POST",
@@ -54,10 +56,7 @@ export async function POST() {
     }
 
     return NextResponse.json({ message: "Email sent", data: response }, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json({
-      error: "Something went wrong",
-      details: error.message,
-    });
+  } catch (error: unknown) {
+    return APIErrorHandler(error)
   }
 }

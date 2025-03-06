@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { AssetFormValues, assetSchema } from "@/lib/schemas/assetSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Plus } from "lucide-react";
@@ -21,11 +22,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const assetSchema = z.object({
-  asset_name: z.string().min(1, "Asset name is required"),
-});
+// const assetSchema = z.object({
+//   asset_name: z.string().min(1, "Asset name is required"),
+// });
 
-type AssetFormValues = z.infer<typeof assetSchema>;
+// type AssetFormValues = z.infer<typeof assetSchema>;
 
 export default function AssetForm() {
   const queryClient = useQueryClient();

@@ -2,12 +2,16 @@
 
 import { Asset } from "@/lib/interface";
 import DeleteAsset from "./DeleteAsset";
+import { UpdateAsset } from "./UpdateAsset";
 
-export default function AssetActions({item}:{item:Asset}) {
+export default function AssetActions({ item }: { item: Asset }) {
 
   return (
     <>
-      <DeleteAsset item={item} ></DeleteAsset>
+      <span className="flex flex-row">
+        <UpdateAsset item={item}></UpdateAsset>
+        <DeleteAsset item={item} ></DeleteAsset>
+      </span>
     </>
   );
 }

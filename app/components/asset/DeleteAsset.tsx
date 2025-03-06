@@ -29,7 +29,7 @@ export default function DeleteAssetButton({ item }: { item: Asset }) {
       const response = await fetch(`/api/assets/${item.asset_id}`, {
         method: "DELETE",
       });
-
+      
       if (!response.ok) throw new Error("Failed to delete asset");
 
       return await response.json();

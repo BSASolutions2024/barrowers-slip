@@ -28,6 +28,7 @@ export default function BorrowersCard() {
       if (!res.ok) throw new Error("Failed to fetch assets");
       return res.json();
     },
+    staleTime: 1000 * 30
   });
 
   const mutation = useMutation({
@@ -115,6 +116,7 @@ export default function BorrowersCard() {
                     <td>{record.borrower_name}</td>
                     <td>
                       <ul className="list-disc">
+                        {record.borrow_items.length == 0 && ("No Asset(s) found: The asset might have been deleted.")}
                         {record.borrow_items.map((item: any) => (
                           <li key={item.asset_id}>{item.assets.asset_name}</li>
                         ))}

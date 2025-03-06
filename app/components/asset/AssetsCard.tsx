@@ -16,7 +16,8 @@ export default function AssetsCard() {
       const res = await fetch("/api/assets");
       if (!res.ok) throw new Error("Failed to fetch assets");
       return res.json();
-    }
+    },
+    staleTime: 1000 * 30
   });
 
   return (
@@ -32,7 +33,7 @@ export default function AssetsCard() {
               <h2 className="card-title">Assets</h2>
               <AssetForm />
             </div>
-            <table className="table">
+            <table className="table table-auto">
               <thead>
                 <tr>
                   <th>Name</th>

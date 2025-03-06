@@ -13,6 +13,7 @@ export default function AssetList(props:any) {
       if (!res.ok) throw new Error("Failed to fetch assets");
       return res.json();
     },
+    staleTime: 1000 * 30
   });
 
   if (isLoading) return <Skeleton className="h-4 w-[250px]"></Skeleton>;
